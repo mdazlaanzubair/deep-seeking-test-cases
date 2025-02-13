@@ -38,7 +38,7 @@ Follow these steps to clone the repository, set up your virtual environment, ins
 Open your terminal and run:
 
 ```bash
-git clone https://github.com/yourusername/langchain_project.git
+git clone https://github.com/mdazlaanzubair/deep-seeking-test-cases.git
 ```
 ```bash
 cd langchain_project
@@ -85,9 +85,15 @@ pip3 install langchain langchain-ollama tqdm pandas numpy matplotlib seaborn
 
 ### 4. Run the Project
 Run the main script with:
+- **On Windows:**
 ```bash
 python main.py
 ```
+- **On macOS/Linux:**
+```bash
+python3 main.py
+```
+
 You should see the following:
 - A printed preview of a DataFrame generated from random data.
 - A progress bar (powered by tqdm) simulating work.
