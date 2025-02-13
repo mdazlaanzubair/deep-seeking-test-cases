@@ -1,4 +1,3 @@
-## Libraries/Functions
 from langchain.prompts import PromptTemplate
 from langchain_ollama.llms import OllamaLLM
 from langchain.output_parsers import PydanticOutputParser
@@ -117,28 +116,31 @@ def get_prompt():
     enclosed in triple backticks (`json ... `). **DO NOT INCLUDE ANY ADDITIONAL TEXT**
     outside the JSON block. Your response **MUST ONLY CONTAIN** the JSON, and nothing else.
 
+    Following JSON Schema represents the format I want you to follow to generate your answer.
+    Now, generate a JSON object that will contain the following information:
+    
     ```json
     {{
-    "test_case_id": "{test_case_id}",
-    "evaluation": {{
-        "coverage": {{
-        "score": 5,
-        "reason": "The test case covers all critical modules and features, including edge cases."
-        }},
-        "clarity": {{
-        "score": 4,
-        "reason": "The steps are clear, but the expected outcome could be more detailed."
-        }},
-        "edge_and_negative_cases_score": {{
-        "score": 3,
-        "reason": "Some edge cases are missing, such as handling null inputs."
-        }},
-        "non_functional_coverage": {{
-        "score": 2,
-        "reason": "No mention of performance or security testing."
-        }},
-        "justification": "Overall, the test case is strong in functional coverage but lacks depth in non-functional aspects."
-    }}
+        "test_case_id": "{test_case_id}",
+        "evaluation": {{
+            "coverage": {{
+            "score": 5,
+            "reason": "The test case covers all critical modules and features, including edge cases."
+            }},
+            "clarity": {{
+            "score": 4,
+            "reason": "The steps are clear, but the expected outcome could be more detailed."
+            }},
+            "edge_and_negative_cases_score": {{
+            "score": 3,
+            "reason": "Some edge cases are missing, such as handling null inputs."
+            }},
+            "non_functional_coverage": {{
+            "score": 2,
+            "reason": "No mention of performance or security testing."
+            }},
+            "justification": "Overall, the test case is strong in functional coverage but lacks depth in non-functional aspects."
+        }}
     }}
     ```
     """
@@ -151,7 +153,7 @@ def get_prompt():
 # 3. CHAIN MAKER
 # --------------
 # Function to return the chain after chaining of prompt and model
-def get_chain(model_name="llama3.2:1b"):
+def get_chain(model_name="llama3.2:3b"):
     # Loading prompt template and input variables list
     PROMPT_TEMPLATE, INPUT_VARIABLES = get_prompt()
 
@@ -169,4 +171,3 @@ def get_chain(model_name="llama3.2:1b"):
     chain = prompt | model
     
     return chain
-

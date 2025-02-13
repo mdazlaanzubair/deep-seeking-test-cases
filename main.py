@@ -1,115 +1,124 @@
 from tqdm import tqdm
 import datetime
-import time
-import copy
 import json
-
 from modules.helper import load_data, chunk_data, save_data
 from modules.langchain import get_chain, parser
 
-# Loading test cases data
+# Load test cases data
 test_cases = load_data('data/cleaned_data.json')
 
-# Chunking test cases data
+# Chunk test cases data
 tc_chunks = chunk_data(test_cases, 3)
 
-# Initializing chain for evaluation of test cases
-models_list = ["deepseek-r1:1.5b", "llama3.2:1b", "llama3.2", "mistral"]
-chain = get_chain(model_name=models_list[1])
+# Initialize chain for evaluation
+models_list = ["deepseek-r1:1.5b", "llama3.2:3b", "mistral:7b"]
+active_model = models_list[2]
+chain = get_chain(model_name=active_model)
 
-# Function to evaluate test_cases using langchain and llm
+# Lists to hold successful and unsuccessful test cases
+success_jobs = []
+failed_jobs = []
+
 def evaluate_test_case(test_case, model_name):
-    llm_raw_output="" # variable to hold raw llm response
-    start_time = "" # variable to hold processing start time
-    end_time = "" # variable to hold processing end time
-    
-    # Dictionary to hold the LLM response
+    """
+    Evaluate a single test case using the specified model.
+    """
+    start_time = datetime.datetime.now()
+    llm_raw_output = ""
     response_dict = {}
-    
-    # Extracting input variables value from test_case object
-    # Making deep copy to avoid modifying the original dictionary
-    input_variables = copy.deepcopy(test_case)
 
-    # Remove 'group' from the copy only
-    input_variables.pop('group', None)
+    # Remove 'group' from input variables to avoid modifying the original dictionary
+    input_variables = {k: v for k, v in test_case.items() if k != 'group'}
     
-    # Using try/except to chain invocation process
     try:
-        # Updating start time
-        start_time = datetime.datetime.now()
 
-        # Hitting LLM for response by passing the input_variables
+        # Invoke the LLM chain
         llm_raw_output = chain.invoke(input_variables)
-        
-        # Updating end time
         end_time = datetime.datetime.now()
 
-        # Parsing llm_raw_output using parser
+        # Parse the raw output
         parsed_response = parser.parse(llm_raw_output)
-
-        # Convert parsed response to dictionary
         response_dict = parsed_response.model_dump()
 
-        # Adding time taken in processing
-        response_dict["time_taken"] = {
-            # Formatting times as "dd/mm/yyyy hh:mm:ss"
-            "start_time": start_time.strftime("%d/%m/%Y %H:%M:%S"),
-            "end_time": end_time.strftime("%d/%m/%Y %H:%M:%S"),
-            
-            # Calculating time taken by LLM for evaluation in seconds
-            "duration_in_sec": (end_time - start_time).total_seconds()
-        }
-        
-        
-        # Inserting test_case identifiers
-        response_dict["test_case_id"] = test_case["test_case_id"],
-        response_dict["group"] = test_case["group"]
-        response_dict["evaluated_by"] = model_name
+        # Add metadata to the response
+        response_dict.update({
+            "time_taken": {
+                "start_time": start_time.strftime("%d/%m/%Y %H:%M:%S"),
+                "end_time": end_time.strftime("%d/%m/%Y %H:%M:%S"),
+                "duration_in_sec": (end_time - start_time).total_seconds(),
+            },
+            "test_case_id": test_case["test_case_id"],
+            "group": test_case["group"],
+            "evaluated_by": model_name,
+        })
 
-        # print(json.dumps(response_dict, indent=2))
         success_jobs.append(response_dict)
-        print(f"✅ Test case '{test_case["test_case_id"]}' of '{test_case["group"]}' group evaluated successfully!")
-        
+        # print(f"✅ Test case '{test_case['test_case_id']}' of '{test_case['group']}' group evaluated successfully!")
+
     except Exception as e:
-        # Preparing failed object for  alter evaluation and debugging
+        end_time = datetime.datetime.now()
+
+        # Prepare failure details
         failed_case = {
             "evaluated_by": model_name,
             "test_case": test_case,
             "llm_raw_output": llm_raw_output,
             "error_exception_details": str(e),
             "time_taken": {
-                # Formatting times as "dd/mm/yyyy hh:mm:ss"
                 "start_time": start_time.strftime("%d/%m/%Y %H:%M:%S"),
                 "end_time": end_time.strftime("%d/%m/%Y %H:%M:%S"),
-                
-                # Calculating time taken by LLM for evaluation in seconds
-                "duration_in_sec": (end_time - start_time).total_seconds()
-            }
+                "duration_in_sec": (end_time - start_time).total_seconds(),
+            },
         }
-        
+
         failed_jobs.append(failed_case)
-        
-        print(f"❌ Test case '{test_case["test_case_id"]}' of '{test_case["group"]}' group evaluation failed!")
+        # print(f"❌ Test case '{test_case['test_case_id']}' of '{test_case['group']}' group evaluation failed!")
 
 
-# Lists to hold successful and unsuccessful test cases
-success_jobs = []
-failed_jobs = []
-    
-if (chain):
-    # Looping through test cases
-    for test_case in tqdm(tc_chunks[0], desc="Evaluating Test Cases"):
-        # Performing Evaluation
-        evaluate_test_case(test_case, models_list[1])
-        
-        # Saving 
+if chain:
+    # Outer progress bar for chunk processing (yellow)
+    chunk_progress = tqdm(
+        tc_chunks,
+        bar_format='[{elapsed}<{remaining}] {n_fmt}/{total_fmt} | {l_bar}{bar} {rate_fmt}{postfix}',
+        desc="Processing Chunks",
+        colour='yellow',
+        position=0  # Position 0 for the outer progress bar
+    )
+
+    for chunk_index, chunk in enumerate(chunk_progress, start=1):
+        total_test_cases = len(chunk)
+
+        # Update the outer progress bar description
+        chunk_progress.set_description(f"Processing Chunk {chunk_index}/{len(tc_chunks)}")
+
+        # Inner progress bar for test case processing (green)
+        test_case_progress = tqdm(
+            chunk,
+            bar_format='[{elapsed}<{remaining}] {n_fmt}/{total_fmt} | {l_bar}{bar} {rate_fmt}{postfix}',
+            desc=f"Evaluating Test Cases (Chunk {chunk_index})",
+            colour='green',
+            position=1  # Position 1 for the inner progress bar
+        )
+
+        for i, test_case in enumerate(test_case_progress, start=1):
+            # Update the inner progress bar description
+            test_case_progress.set_description(f"Evaluating Test Case {i}/{total_test_cases} (Chunk {chunk_index})")
+            
+            # Perform evaluation
+            evaluate_test_case(test_case, active_model)
+
+        # Save results after processing each chunk
         save_data(success_jobs, "data/evaluations/success.json")
         save_data(failed_jobs, "data/evaluations/failed.json")
-        
-    print("Success:", len(success_jobs), "/", len(tc_chunks[0]))
-    print("Rejected:", len(failed_jobs), "/", len(tc_chunks[0]))
+
+        # print(f"Chunk {chunk_index}: Success: {len(success_jobs)}/{total_test_cases}, Rejected: {len(failed_jobs)}/{total_test_cases}")
+
+        # Break after processing the first chunk
+        break
+
+    print(f"Final Report: Success: {len(success_jobs)}/{total_test_cases}, Rejected: {len(failed_jobs)}/{total_test_cases}")
+    
 else:
     print("Lang-Chain does not initialized.")
-
-
-
+    
+    
