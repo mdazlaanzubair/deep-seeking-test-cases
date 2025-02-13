@@ -1,0 +1,27 @@
+[
+    {
+        "evaluated_by": "llama3.2:1b",
+        "test_case": {
+            "test_case_id": "TEST-CASE-03",
+            "group": "human-engineers",
+            "software_name": "Commonwealth Casualty Company\u2019s (CCC) Document Templating Engine with AWS",
+            "software_desc": "The CCC Document Templating Engine is a software application designed to modernize the creation of contractual agreements and document generation for Commonwealth Casualty Company. It leverages Amazon Web Services (AWS) and the Pebble templating engine to facilitate dynamic document creation, version control, and email integration. Key features include document generation in Doc/PDF format, digital signatures via DocuSign, template editing, version comparison, and automated email distribution of generated documents. The system is designed for authenticated CCC employees, ensuring security, efficiency, and accuracy in document handling.",
+            "test_module": "Authentication and Authorization",
+            "test_feature": "Authentication",
+            "test_case_title": "Validate password field for empty input",
+            "test_case_description": "Ensure the login button is disabled when the password field is empty.",
+            "pre_conditions": "User is on the login page.",
+            "test_steps": "1. Enter valid username.\n 2. Leave password field empty.\n 3. Attempt to click 'Login'.",
+            "test_data": "Username: valid_user\nPassword: (empty)",
+            "expected_outcome": "Login button remains disabled.",
+            "severity_status": "Minor"
+        },
+        "llm_raw_output": "```\n{\n\"test_case_id\": \"TEST-CASE-03\",\n\"evaluation\": {\n  \"coverage\": {\n    \"score\": 5,\n    \"reason\": \"The test case covers all critical modules and features, including edge cases.\"\n  },\n  \"clarity\": {\n    \"score\": 4,\n    \"reason\": \"The steps are clear, but the expected outcome could be more detailed.\"\n  },\n  \"edge_and_negative_cases_score\": {\n    \"score\": 3,\n    \"reason\": \"Some edge cases are missing, such as handling null inputs.\"\n  },\n  \"non_functional_coverage\": {\n    \"score\": 2,\n    \"reason\": \"No mention of performance or security testing.\"\n  }\n}\n```",
+        "error_exception_details": "Failed to parse TestCaseEvaluation from completion {\"test_case_id\": \"TEST-CASE-03\", \"evaluation\": {\"coverage\": {\"score\": 5, \"reason\": \"The test case covers all critical modules and features, including edge cases.\"}, \"clarity\": {\"score\": 4, \"reason\": \"The steps are clear, but the expected outcome could be more detailed.\"}, \"edge_and_negative_cases_score\": {\"score\": 3, \"reason\": \"Some edge cases are missing, such as handling null inputs.\"}, \"non_functional_coverage\": {\"score\": 2, \"reason\": \"No mention of performance or security testing.\"}}}. Got: 1 validation error for TestCaseEvaluation\nevaluation.justification\n  Field required [type=missing, input_value={'coverage': {'score': 5,... or security testing.'}}, input_type=dict]\n    For further information visit https://errors.pydantic.dev/2.10/v/missing\nFor troubleshooting, visit: https://python.langchain.com/docs/troubleshooting/errors/OUTPUT_PARSING_FAILURE ",
+        "time_taken": {
+            "start_time": "13/02/2025 17:20:44",
+            "end_time": "13/02/2025 17:20:53",
+            "duration_in_sec": 9.262394
+        }
+    }
+]

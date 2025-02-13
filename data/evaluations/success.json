@@ -1,0 +1,64 @@
+[
+    {
+        "test_case_id": [
+            "TEST-CASE-01"
+        ],
+        "evaluation": {
+            "coverage": {
+                "score": 5,
+                "reason": "The test case covers all critical modules and features, including edge cases. The coverage is sufficient to ensure the system's reliability."
+            },
+            "clarity": {
+                "score": 4,
+                "reason": "While the steps are clear, the expected outcome could be more detailed. The test scenario lacks specific details about successful login outcomes, such as user messages or exceptions."
+            },
+            "edge_and_negative_cases_score": {
+                "score": 3,
+                "reason": "Some edge cases are missing, such as handling null inputs. The test case does not adequately address potential failures or edge cases that could impact the system's functionality."
+            },
+            "non_functional_coverage": {
+                "score": 2,
+                "reason": "No mention of performance or security testing. The test case primarily focuses on authentication and authorization without evaluating other non-functional aspects."
+            },
+            "justification": "The test case is strong in functional coverage but lacks depth in non-functional aspects, such as performance and security testing. However, the system's reliability is ensured due to its comprehensive module coverage."
+        },
+        "time_taken": {
+            "start_time": "13/02/2025 17:19:56",
+            "end_time": "13/02/2025 17:20:32",
+            "duration_in_sec": 35.923724
+        },
+        "group": "human-engineers",
+        "evaluated_by": "llama3.2:1b"
+    },
+    {
+        "test_case_id": [
+            "TEST-CASE-02"
+        ],
+        "evaluation": {
+            "coverage": {
+                "score": 5,
+                "reason": "The test case covers all critical modules and features, including edge cases. The test is well-structured and follows industry standards."
+            },
+            "clarity": {
+                "score": 4,
+                "reason": "While the steps are clear, there's a need for more detail in the expected outcome. This adds some complexity to the evaluation."
+            },
+            "edge_and_negative_cases_score": {
+                "score": 3,
+                "reason": "Some edge cases are missing, such as handling null inputs. This is an area where more thorough testing would be beneficial."
+            },
+            "non_functional_coverage": {
+                "score": 2,
+                "reason": "There's no mention of performance or security testing in this test case."
+            },
+            "justification": "Overall, the test case is strong in functional coverage but lacks depth in non-functional aspects. It also could benefit from more edge and negative cases to ensure thoroughness."
+        },
+        "time_taken": {
+            "start_time": "13/02/2025 17:20:32",
+            "end_time": "13/02/2025 17:20:44",
+            "duration_in_sec": 11.805646
+        },
+        "group": "human-engineers",
+        "evaluated_by": "llama3.2:1b"
+    }
+]

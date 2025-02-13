@@ -1,10 +1,10 @@
 # QA Test Eval
 
-This repository related to research conduct over comparitive study on writing **Manual Test Cases** using LLMs (GPT 4o and o1). The purpose of research is to answer following questions:
+This repository related to research conduct over comparative study on writing **Manual Test Cases** using LLMs (GPT 4o and o1). The purpose of research is to answer following questions:
 
 > 1. Does AI models are better in writing quality test cases than Human Engineers?
 > 2. Does the reasoning capabilities of an LLMs really impact the quality of test cases?
-> 3. Can we achive the similar **achive the quality of reasoning LLMs by just using prompt engineering** on a regular LLM?
+> 3. Can we achieve the similar quality of reasoning LLMs by just using prompt engineering on a regular LLM?
 
 Following are the libraries that this Python project require to evaluate the quality of test cases written by `Human Engineers`, `GPT 4o` and `o1`:
 
