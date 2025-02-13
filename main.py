@@ -8,11 +8,11 @@ from modules.langchain import get_chain, parser
 test_cases = load_data('data/cleaned_data.json')
 
 # Chunk test cases data
-tc_chunks = chunk_data(test_cases, 3)
+tc_chunks = chunk_data(test_cases, 10)
 
 # Initialize chain for evaluation
 models_list = ["deepseek-r1:1.5b", "llama3.2:3b", "mistral:7b"]
-active_model = models_list[2]
+active_model = models_list[1]
 chain = get_chain(model_name=active_model)
 
 # Lists to hold successful and unsuccessful test cases
@@ -107,9 +107,9 @@ if chain:
             # Perform evaluation
             evaluate_test_case(test_case, active_model)
 
-        # Save results after processing each chunk
-        save_data(success_jobs, "data/evaluations/success.json")
-        save_data(failed_jobs, "data/evaluations/failed.json")
+            # Save results after processing each test case
+            save_data(success_jobs, "data/evaluations/success.json")
+            save_data(failed_jobs, "data/evaluations/failed.json")
 
         # print(f"Chunk {chunk_index}: Success: {len(success_jobs)}/{total_test_cases}, Rejected: {len(failed_jobs)}/{total_test_cases}")
 
