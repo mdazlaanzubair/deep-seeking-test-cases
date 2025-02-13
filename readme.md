@@ -1,39 +1,86 @@
-# QA Test Eval
+# Comparative Study of LLMs for Manual Test Case Evaluation
 
-This repository related to research conduct over comparative study on writing **Manual Test Cases** using LLMs (GPT 4o and o1). The purpose of research is to answer following questions:
+[![License](https://img.shields.io/badge/License-MIT-blue.svg)](https://opensource.org/licenses/MIT)
 
-> 1. Does AI models are better in writing quality test cases than Human Engineers?
-> 2. Does the reasoning capabilities of an LLMs really impact the quality of test cases?
-> 3. Can we achieve the similar quality of reasoning LLMs by just using prompt engineering on a regular LLM?
+## Overview
 
-Following are the libraries that this Python project require to evaluate the quality of test cases written by `Human Engineers`, `GPT 4o` and `o1`:
+This repository contains a Python script designed to conduct research on the comparative effectiveness of Large **Language Models (LLMs)** in evaluating manual test cases. The research aims to explore whether AI models can match or exceed human engineers in assessing the quality of test cases, and to investigate the impact of LLM reasoning capabilities and prompt engineering on evaluation quality.
 
-- [LangChain](https://github.com/hwchase17/langchain)
-- [langchain-ollama](https://github.com/ollama/ollama)
-- [tqdm](https://github.com/tqdm/tqdm)
-- [pandas](https://pandas.pydata.org/)
-- [numpy](https://numpy.org/)
-- [matplotlib](https://matplotlib.org/)
-- [seaborn](https://seaborn.pydata.org/)
+This project uses **Langchain** and **Ollama** to evaluate test cases against predefined quality criteria, providing a structured, data-driven approach to test case assessment.
 
-The project includes an script (`main.py`) that:
-- Interacts with an LLM via LangChain using `langchain-ollama`.
-- Evaluate and score the manual software quality test cases using LLM running locally using Ollama.
-- Perform statistics on the evaluated score using `pandas` and `scipy` to generate insights from data.
-- Generates and visualizes those statiscs using `matplotlib` and `seaborn`.
-- Displays progress using `tqdm`.
+### Research Questions
 
-## Prerequisites
+This research endeavors to answer the following key questions:
 
-- **Python 3.x**: [Download Python](https://www.python.org/downloads/)
-- **Git**: [Download Git](https://git-scm.com/downloads)
-- **VS Code** (Optional but recommended): [Download VS Code](https://code.visualstudio.com/)
+1.  **Quality Comparison:** Are AI models capable of writing higher quality test cases compared to human software engineers?
+2.  **Reasoning Impact:** Does the inherent reasoning capability of different LLMs significantly influence the quality of test case evaluations they produce?
+3.  **Prompt Engineering vs. Model Reasoning:** Can prompt engineering applied to a standard LLM achieve comparable reasoning quality to a more advanced LLM, specifically in the context of test case evaluation?
 
-## Getting Started
+## Code Structure
+
+The codebase is structured as follows:
+
+*   **`data/`**: This directory contains data files:
+
+    *   **`raw_data.json`**:  Raw data of test cases imported from google sheets.
+
+    *   **`cleaned_data.json`**:  Cleaned and structured copy of raw data containing the manual test cases to be evaluated.
+
+    *   **`data/evaluations/`**:  Directory to store evaluation results:
+
+        *   `success.json`:  JSON file storing successful test case evaluations.
+
+        *   `failed.json`: JSON file storing details of failed test case evaluations.
+
+*   **`modules/`**:  This directory houses Python modules:
+
+    *   **`helper.py`**: Contains helper functions for data loading, chunking, and saving.
+
+    *   **`langchain.py`**:  Sets up the Langchain components, including:
+
+        *   Pydantic model definitions for structured output parsing.
+
+        *   Prompt template for guiding LLM evaluation.
+        
+        *   Chain creation using Langchain and Ollama.
+
+*   **`main.py`**: The main script to run the test case evaluation process.
+
+## Setup and Usage
+
+To run this script, you'll need to set up your environment with the necessary dependencies and models. 
+
+Following are the libraries that this Python project require to evaluate the quality of test cases:
+
+- [**LangChain**](https://github.com/hwchase17/langchain)
+- [**langchain-ollama**](https://github.com/ollama/ollama)
+- [**tqdm**](https://github.com/tqdm/tqdm)
+- [**pandas**](https://pandas.pydata.org/)
+- [**numpy**](https://numpy.org/)
+- [**matplotlib**](https://matplotlib.org/)
+- [**seaborn**](https://seaborn.pydata.org/)
+
+
+### Prerequisites
+
+- **Python 3.x**: [**Download Python**](https://www.python.org/downloads/)
+- **Git**: [**Download Git**](https://git-scm.com/downloads)
+- **VS Code** (Optional but recommended): [**Download VS Code**](https://code.visualstudio.com/)
+- **Ollama**: Ensure you have Ollama installed and running. Ollama is used to host and serve the LLMs locally. You can download it from [**https://ollama.com/**](https://ollama.com/).
+- **LLMs**: Pull the required LLMs using Ollama. The script is configured to use `llama3.2:3b`, or `mistral:7b`. You can pull these models using Ollama CLI:
+
+    ```bash
+    ollama pull llama3.2:3b
+    ```
+    ```bash
+    ollama pull mistral:7b
+    ```
+
+### Getting Started
 
 Follow these steps to clone the repository, set up your virtual environment, install dependencies, and run the project locally.
 
-### 1. Clone the Repository
+#### 1. Clone the Repository
 
 Open your terminal and run:
 
@@ -41,10 +88,10 @@ Open your terminal and run:
 git clone https://github.com/mdazlaanzubair/deep-seeking-test-cases.git
 ```
 ```bash
-cd langchain_project
+cd deep-seeking-test-cases
 ```
 
-### 2. Create a Virtual Environment
+#### 2. Create a Virtual Environment
 It is recommended to use a virtual environment to manage dependencies.
 - **On Windows:**
 ```bash
@@ -63,7 +110,7 @@ python3 -m venv env
 source env/bin/activate 
 ```
 
-### 3. Install Dependencies
+#### 3. Install Dependencies
 If a requirements.txt file is available, install the dependencies by running:
 - **On Windows:**
 ```bash
@@ -83,30 +130,65 @@ pip install langchain langchain-ollama tqdm pandas numpy matplotlib seaborn
 pip3 install langchain langchain-ollama tqdm pandas numpy matplotlib seaborn
 ```
 
-### 4. Run the Project
-Run the main script with:
-- **On Windows:**
-```bash
-python main.py
-```
-- **On macOS/Linux:**
-```bash
-python3 main.py
-```
+#### 4. Run the Project
+1.  **Prepare Test Case Data:** Ensure your test case data is in the `data/cleaned_data.json` file and conforms to the expected structure (as implied by the script's input variables).
 
-You should see the following:
-- A printed preview of a DataFrame generated from random data.
-- A progress bar (powered by tqdm) simulating work.
-- A plot window displaying the generated data (using matplotlib and seaborn).
-- The output of an LLM query printed in the terminal.
+2. **Run the main script** with:
+    - **On Windows:**
+    ```bash
+    python main.py
+    ```
+    - **On macOS/Linux:**
+    ```bash
+    python3 main.py
+    ```
+3.  **Monitor Progress:** The script uses `tqdm` to display progress bars for chunk and test case processing in the console.
 
-### Troubleshooting
+4.  **View Results:** After execution, the evaluation results will be saved in the `data/evaluations/` directory:
+    *   `success.json`: Contains detailed JSON outputs for each successfully evaluated test case, including scores for coverage, clarity, edge cases, non-functional coverage, and justifications.
+
+    *   `failed.json`: Contains details of any test cases that failed during evaluation, including error messages and raw LLM output (if available).
+
+#### Configuration
+
+*   **Model Selection:**  The `main.py` script uses `mistral:7b` as the active model by default (`active_model = models_list[2]`). To change the model, modify the `models_list` and the index for `active_model` in the `main.py` script. Ensure the model you select is pulled via Ollama.
+
+*   **Chunk Size:** The `chunk_data` function in `modules/helper.py` is set to chunk test cases into groups of 3 (`chunk_data(test_cases, 3)`).  Adjust the chunk size as needed for performance or batch processing preferences.
+
+*   **Prompt Template:** The prompt template used for evaluation is defined in `modules/langchain.py` within the `get_prompt()` function. You can customize this prompt to adjust the evaluation criteria, instructions, or scoring scale.
+
+### Data Format
+
+The script expects the input data in `data/cleaned_data.json` to be a list of dictionaries, where each dictionary represents a test case and includes the following keys (input variables for the prompt):
+
+*   `software_name`
+*   `software_desc`
+*   `test_case_id`
+*   `test_module`
+*   `test_feature`
+*   `test_case_title`
+*   `test_case_description`
+*   `pre_conditions`
+*   `test_steps`
+*   `test_data`
+*   `expected_outcome`
+*   `severity_status`
+*   `group` *(This field is used for grouping and is removed before passing to the LLM in order to remove biasness)*
+
+The output is structured in **JSON format** as defined by the **Pydantic models** in `modules/langchain.py`, providing scores and reasons for each evaluation criterion.
+
+
+## Troubleshooting
 
 - **Virtual Environment:**
-Ensure that your virtual environment is activated. You should see (env) in your terminal prompt.
+Ensure that your virtual environment is activated. You should see (venv) in your terminal prompt.
 
 - **Dependency Installation:**
 Verify that you have a stable internet connection and the necessary permissions to install packages.
 
 - **LangChain / Ollama Setup:**
 Make sure that your Ollama service or local model is correctly configured and running. Refer to the [**langchain-ollama documentation**](https://python.langchain.com/api_reference/community/llms/langchain_community.llms.ollama.Ollama.html "langchain-ollama documentation") for additional guidance.
+
+## License
+
+This project is licensed under the **MIT License** - see the [**LICENSE**](https://opensource.org/license/MIT) file for details.
