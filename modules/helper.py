@@ -105,3 +105,6 @@ def wait_for_reset(condition):
         print(f"Daily limit reached. Waiting {HALF_DAY_DELAY} seconds...")
         time.sleep(HALF_DAY_DELAY)
         print(f"Wait is over, script started again...")
+
+
+

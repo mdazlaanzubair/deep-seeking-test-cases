@@ -154,11 +154,11 @@ pip3 install -r requirements.txt
 Alternatively, you can install the necessary packages manually:
 - **On Windows:**
 ```bash
-pip install langchain langchain-ollama langchain-groq tqdm pandas numpy matplotlib seaborn
+pip install langchain langchain-ollama langchain-groq tqdm pandas numpy matplotlib seaborn scipy
 ```
 - **On macOS/Linux:**
 ```bash
-pip3 install langchain langchain-ollama langchain-groq tqdm pandas numpy matplotlib seaborn
+pip3 install langchain langchain-ollama langchain-groq tqdm pandas numpy matplotlib seaborn scipy
 ```
 
 #### 4. Run the Project
