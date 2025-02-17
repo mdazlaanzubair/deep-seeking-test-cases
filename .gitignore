@@ -1,1 +1,4 @@
 venv
+api_keys.py
+*.pyc
+__pycache__

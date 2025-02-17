@@ -2,7 +2,7 @@ from tqdm import tqdm
 import datetime
 import json
 from modules.helper import load_data, chunk_data, save_data
-from modules.langchain import get_chain, parser
+from modules.langchain_helper import get_chain, parser
 
 # Load test cases data
 test_cases = load_data('data/cleaned_data.json')
